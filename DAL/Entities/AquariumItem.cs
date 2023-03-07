@@ -1,13 +1,11 @@
-using System;
-
 namespace DAL.Entities {
     public abstract class AquariumItem: Entity {
-        public AquariumItem() { }
+        public AquariumItem(){ }
         public String Aquarium {get; set;}
         public String Name { get; set; }
         public String Species { get; set; }
-        public DateTime Inserted {get; set;} = DateTime.Now;
-        public int Amount {get; set;}
-        public String Description {get; set;}
+        public DateTime Inserted { get; set; } = DateTime.Now;
+        public int Amount { get; set; }
+        public String Description { get; set; }
     }
 }

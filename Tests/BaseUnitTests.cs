@@ -2,18 +2,16 @@ using Logger = Utils.Logger;
 using ILogger = Serilog.ILogger;
 
 namespace Tests {
-    public class BaseUnitTests{
+    public class BaseUnitTests {
         protected ILogger log = Logger.ContextLog<BaseUnitTests>();
 
         [OneTimeSetUp]
-        public async Task Setup()
-        {
+        public async Task Setup() {
             Logger.InitLogger();
         }
 
         [Test]
-        public void MyFirstLog()
-        {
+        public void MyFirstLog() {
             log.Information("My first try");
             Assert.IsTrue(true);
         }

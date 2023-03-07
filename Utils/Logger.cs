@@ -2,7 +2,6 @@ using Serilog;
 using Microsoft.Extensions.Configuration;
 
 namespace Utils {
-
     public static class Logger {
         private static ILogger _Logger = null;
         private static Boolean IsInitialized = false;
@@ -27,9 +26,9 @@ namespace Utils {
                 });
 
                 var configuration = new ConfigurationBuilder()
-                .SetBasePath(folder)
-                .AddJsonFile("appsettings.json")
-                .Build();
+                    .SetBasePath(folder)
+                    .AddJsonFile("appsettings.json")
+                    .Build();
 
                 Log.Logger = new LoggerConfiguration()
                     .ReadFrom
