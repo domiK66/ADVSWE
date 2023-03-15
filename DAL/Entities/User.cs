@@ -7,7 +7,7 @@ namespace DAL.Entities {
         [JsonIgnore] public String HashedPassword { get; set; }
         public String Firstname { get; set; }
         public String Lastname { get; set; }
-        public String Fullname { get => Firstname + " " + Lastname; }
+        public String Fullname { get => $"{Firstname} {Lastname}"; }
         public Boolean IsActive { get; set; }
     }
 }
