@@ -18,3 +18,5 @@ dotnet add package Newtonsoft.Json
 - Eine Class in ./DAL
 - IPasswordHasher
 - Unit tests
+
+dotnet add package BCrypt.Net-Next
