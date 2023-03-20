@@ -9,7 +9,7 @@ public class AquariumItemRepository: Repository<AquariumItem>, IAquariumItemRepo
     public List<Coral> GetCorals(){
         return FilterByType<Coral>().ToList();
     }
-    public IEnumerable<E> FilterByType<E>() where E: AquariumItem {
-        return FilterBy(x => true).OfType<E>();
+    public IEnumerable<TEntity> FilterByType<TEntity>() where TEntity: AquariumItem {
+        return FilterBy(x => true).OfType<TEntity>();
     }
 }

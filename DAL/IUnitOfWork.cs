@@ -4,5 +4,7 @@ using DAL.Repository;
 namespace DAL;
 public interface IUnitOfWork {
     DBContext Context { get; }
-    IRepository<Aquarium> Aquarium { get; }
+    IAquariumRepository Aquarium { get; }
+    IAquariumItemRepository AquariumItem { get; }
+    IUserRepository User { get; }
 }
