@@ -33,7 +33,6 @@ namespace Services
 
         public Dictionary<string, string> Errors
         {
-
             get
             {
                 Dictionary<String, String> errors = new Dictionary<string, string>();
@@ -51,12 +50,10 @@ namespace Services
                         errormessage += error.ErrorMessage;
                     }
 
-
                     errors.Add(err.Key, errormessage);
                 }
 
                 return errors;
-
             }
         }
     }

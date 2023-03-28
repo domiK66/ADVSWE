@@ -3,10 +3,15 @@ using DAL.Entities;
 
 namespace Tests;
 
-public class UserTests {
+public class RegisterAndLoginTests
+{
     UnitOfWork uow = new UnitOfWork();
-    [Test] public async Task RegisterAndLoginTest(){
-        var user = new User(){
+
+    [Test]
+    public async Task RegisterAndLoginTest()
+    {
+        var user = new User()
+        {
             Firstname = "Dominik",
             Lastname = "Kainz",
             Username = "666dK",
@@ -21,6 +26,4 @@ public class UserTests {
         Assert.AreEqual(loggedInUser.Firstname, "Dominik");
         await uow.User.DeleteByIdAsync(loggedInUser.ID);
     }
-
-    
 }

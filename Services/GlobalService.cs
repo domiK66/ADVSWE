@@ -1,7 +1,3 @@
-namespace Services
-{
-    public class GlobalService
-    {
-        
-    }
-}
+namespace Services;
+
+public class GlobalService { }

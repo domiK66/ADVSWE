@@ -3,8 +3,9 @@ using DAL.Repository;
 
 namespace DAL;
 public interface IUnitOfWork {
-    DBContext Context { get; }
-    IAquariumRepository Aquarium { get; }
-    IAquariumItemRepository AquariumItem { get; }
-    IUserRepository User { get; }
+    public DBContext Context { get; }
+    public IAquariumRepository Aquarium { get; }
+    public IAquariumItemRepository AquariumItem { get; }
+    public IUserRepository User { get; }
+    public IRepository<UserAquarium> UserAquarium { get; }
 }
