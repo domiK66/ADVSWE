@@ -10,7 +10,9 @@ public class UserTests {
             Firstname = "Dominik",
             Lastname = "Kainz",
             Username = "666dK",
-            Password = "Pa55w.rd"
+            Password = "Pa55w.rd",
+            Email = "kainz.domi@gmail.com",
+            IsActive = true
         };
         var registeredUser = await uow.User.Register(user);
         Assert.AreEqual(registeredUser.Username, "666dK");
@@ -19,4 +21,6 @@ public class UserTests {
         Assert.AreEqual(loggedInUser.Firstname, "Dominik");
         await uow.User.DeleteByIdAsync(loggedInUser.ID);
     }
+
+    
 }
