@@ -20,9 +20,9 @@ public class UserServiceTests : BaseUnitTest
     }
 
     [Test]
-    public async Task TestInsert()
+    public async Task ShouldInsertUserAndNotTheSameTwice()
     {
-        var user = new User()
+        var user1 = new User()
         {
             Firstname = "Dominik",
             Lastname = "Kainz",
@@ -33,24 +33,50 @@ public class UserServiceTests : BaseUnitTest
         };
         var modelState = new Mock<ModelStateDictionary>();
         await userService.SetModelState(modelState.Object);
+        ItemResponseModel<User> fromservice = await userService.CreateHandler(user1);
+        Assert.IsFalse(fromservice.HasError);
 
-        ItemResponseModel<User> fromservice = await userService.CreateHandler(user);
-
-        Assert.IsTrue(fromservice.HasError);
+        var user2 = new User()
+        {
+            Firstname = "Dominik",
+            Lastname = "Kainz",
+            Username = "777dK",
+            Password = "Pa55w.rd",
+            Email = "kainz.domi@gmail.com",
+            IsActive = true
+        };
+        ItemResponseModel<User> fromservice2 = await userService.CreateHandler(user2);
+        Assert.IsTrue(fromservice2.HasError);
+        await uow.User.DeleteManyAsync(user => user.Email == "kainz.domi@gmail.com");
     }
 
     [Test]
-    public async Task TestUpdate()
+    public async Task ShouldUpdateUser()
     {
-        var user = await uow.User.Login("666dK1", "Pa55w.rd");
-        user.Email = "kainz.domi@gmx.at";
+                
         var modelState = new Mock<ModelStateDictionary>();
         await userService.SetModelState(modelState.Object);
 
-        ItemResponseModel<User> fromservice = await userService.UpdateHandler(user.ID, user);
+        var user = new User()
+        {
+            Firstname = "Dominik",
+            Lastname = "Kainz",
+            Username = "666dK1",
+            Password = "Pa55w.rd",
+            Email = "kainz.domi@gmail.com",
+            IsActive = true
+        };
 
-        Assert.NotNull(fromservice);
-        Assert.IsFalse(fromservice.HasError);
+        var userResponse = await userService.CreateHandler(user);
+        userResponse.Data.Email = "kainz.domi@gmx.at";
+
+        await userService.SetModelState(modelState.Object);
+
+        ItemResponseModel<User> fromservice2 = await userService.UpdateHandler(userResponse.Data.ID, userResponse.Data);
+
+        Assert.NotNull(fromservice2);
+        Assert.IsFalse(fromservice2.HasError);
+        await uow.User.DeleteManyAsync(user => user.Email == "kainz.domi@gmx.at");
     }
 
     [Test]
