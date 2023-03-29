@@ -53,7 +53,6 @@ public class UserServiceTests : BaseUnitTest
     [Test]
     public async Task ShouldUpdateUser()
     {
-                
         var modelState = new Mock<ModelStateDictionary>();
         await userService.SetModelState(modelState.Object);
 
@@ -72,7 +71,10 @@ public class UserServiceTests : BaseUnitTest
 
         await userService.SetModelState(modelState.Object);
 
-        ItemResponseModel<User> fromservice2 = await userService.UpdateHandler(userResponse.Data.ID, userResponse.Data);
+        ItemResponseModel<User> fromservice2 = await userService.UpdateHandler(
+            userResponse.Data.ID,
+            userResponse.Data
+        );
 
         Assert.NotNull(fromservice2);
         Assert.IsFalse(fromservice2.HasError);
@@ -106,7 +108,6 @@ public class UserServiceTests : BaseUnitTest
 
         Assert.NotNull(loginResponse.Data?.AuthInfo);
         Assert.IsNotEmpty(loginResponse.Data?.AuthInfo.Token);
-
 
         await uow.User.DeleteManyAsync(user => user.Email == "domi@kainz.com");
     }
