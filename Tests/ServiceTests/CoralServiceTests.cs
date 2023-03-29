@@ -32,7 +32,7 @@ public class CoralServiceTests : BaseUnitTest
                 Depth = 65,
                 Length = 150,
                 WaterType = WaterType.Saltwater,
-                Name = "Aquarium Item Test",
+                Name = "aquariumItem test",
             }
         );
 
@@ -51,8 +51,11 @@ public class CoralServiceTests : BaseUnitTest
         Assert.NotNull(response);
         Assert.False(response.HasError);
         Assert.NotNull(coral.Inserted);
+        await uow.Aquarium.DeleteManyAsync(a => a.Name == "aquariumItem test");
+        await uow.AquariumItem.DeleteManyAsync(item => item.Description == "coral test");
     }
 
+    [Test]
     public async Task ShouldGetAnimals()
     {
         Task.WaitAll(
@@ -79,10 +82,11 @@ public class CoralServiceTests : BaseUnitTest
         );
 
         var response = await coralService.GetCorals();
-        var animals = response.Data.Where(a => a.Description == "coral  test");
+        var animals = response.Data.Where(a => a.Description == "coral test");
 
         Assert.NotNull(response);
-        Assert.True(response.HasError);
+        Assert.False(response.HasError);
         Assert.AreEqual(animals.Count(), 2);
+        await uow.AquariumItem.DeleteManyAsync(item => item.Description == "coral test");
     }
 }
