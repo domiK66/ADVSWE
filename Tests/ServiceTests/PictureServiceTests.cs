@@ -72,5 +72,16 @@ namespace Tests.ServiceTests
             Assert.AreEqual(pictures.Count, old + 1);
             Assert.IsFalse(pics.HasError);
         }
+        /*
+        [Test]
+        public async Task FindPicture() {
+
+            UnitOfWork uow = new UnitOfWork();
+            PictureService service = new PictureService(uow, uow.Picture, null);
+
+            var pic = await service.GetForAquarium("SchiScho");
+            Assert.NotNull(pic);
+        }
+        */
     }
 }

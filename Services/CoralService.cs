@@ -7,11 +7,8 @@ namespace Services;
 
 public class CoralService : AquariumItemService
 {
-    public CoralService(
-        UnitOfWork uow,
-        IRepository<AquariumItem> repository,
-        GlobalService service
-    ): base(uow, repository, service) { }
+    public CoralService(UnitOfWork uow, IRepository<AquariumItem> repository, GlobalService service)
+        : base(uow, repository, service) { }
 
     public async Task<ItemResponseModel<Coral>> AddCoral(Coral coral)
     {

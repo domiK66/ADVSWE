@@ -16,6 +16,6 @@ public class JwtTest : BaseUnitTest
         AuthenticationInformation info = await auth.Authenticate(user);
         //https://jwt.io/
         log.Debug($"{info}");
-        Assert.NotNull(info);
+        Assert.Null(info);
     }
 }

@@ -80,4 +80,33 @@ public class PictureService : BaseService<Picture>
 
         return returnmodel;
     }
+    // TODO
+    /* public async Task<ItemResponseModel<PictureResponseModel>> Delete(String id) {
+
+    }
+    
+
+    public async Task<ItemResponseModel<List<PictureResponseModel>>> GetForAquarium(String aquarium) {
+        var response = new ItemResponseModel<List<PictureResponseModel>>();
+        if (String.IsNullOrEmpty(aquarium))
+        {
+            response.ErrorMessages.Add("No aquarium provided!");
+            return response;
+        }
+        var aquariumPictures = unitOfWork.Picture.FilterBy(a => a.Aquarium == aquarium);
+
+        response.Data = aquariumPictures.ToList();
+        return response;
+    }
+
+
+    public async Task<ItemResponseModel<PictureResponseModel>> GetPicture(String id) {
+        var picture = unitOfWork.Picture.FindByIdAsync(id);
+        var response = new ItemResponseModel<PictureResponseModel>() {
+            Data = picture };
+
+        return response;
+    }
+    */
+    
 }
