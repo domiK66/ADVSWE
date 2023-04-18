@@ -26,12 +26,6 @@ namespace API.Controllers
             return await PictureService.AddPicture(request.AquariumID, request);
         }
 
-        [HttpGet("GetPicture/{id}")]
-        public async Task<ActionResult<ItemResponse<PictureResponse>>> Get1(String id)
-        {
-            return await PictureService.GetPicture(id);
-        }
-
         [HttpDelete("{id}")]
         public async Task<ActionResult<ActionResponse>> Delete(String id)
         {

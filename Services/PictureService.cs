@@ -94,7 +94,7 @@ public class PictureService : BaseService<Picture>
         return returnmodel;
     }
 
-    public async Task<ItemResponse<PictureResponse>> GetPicture(string id)
+    public async Task<ItemResponse<PictureResponse>> Get(string id)
     {
         var response = new ItemResponse<PictureResponse>();
 
@@ -124,7 +124,7 @@ public class PictureService : BaseService<Picture>
 
         pictures.ForEach(async picture =>
         {
-            var pictureResponse = await GetPicture(picture.ID);
+            var pictureResponse = await Get(picture.ID);
 
             if (pictureResponse.ErrorMessages.Count > 0)
             {
