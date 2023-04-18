@@ -10,12 +10,21 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class UserController : BaseController<User>
     {
+        UserService UserService { get; set; }
+
         public UserController(GlobalService service, IHttpContextAccessor accessor)
-            : base(service.UserService, accessor) { }
+            : base(service.UserService, accessor)
+        {
+            UserService = service.UserService;
+        }
 
         [HttpPost]
-        public async Task<ActionResult<ItemResponseModel<UserResponseModel>>> Login ([FromBody]LoginRequestModel request) {
-            return UserService.Login();
+        [Route("login")]
+        public async Task<ActionResult<ItemResponse<UserResponse>>> Login(
+            [FromBody] LoginRequest request
+        )
+        {
+            return await UserService.Login(request);
         }
-    } }
-
+    }
+}
