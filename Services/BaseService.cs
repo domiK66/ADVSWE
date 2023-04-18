@@ -24,21 +24,21 @@ public abstract class BaseService<TEntity> where TEntity: Entity {
         this.globalService = service;
     }
 
-    public virtual async Task<ActionResponseModel> Delete(String id) {
+    public virtual async Task<ActionResponse> Delete(String id) {
         await repository.DeleteByIdAsync(id);
-        var returnval = new ActionResponseModel();
+        var returnval = new ActionResponse();
         returnval.Success = true;
         return returnval;
     }
 
-    public abstract Task<ItemResponseModel<TEntity>> Create(TEntity entity);
-    public abstract Task<ItemResponseModel<TEntity>> Update(String id, TEntity entity);
+    public abstract Task<ItemResponse<TEntity>> Create(TEntity entity);
+    public abstract Task<ItemResponse<TEntity>> Update(String id, TEntity entity);
     public abstract Task<Boolean> Validate(TEntity entity);
 
-    public virtual async Task<ItemResponseModel<TEntity>> CreateHandler(TEntity entity) {
-        ItemResponseModel<TEntity> response = new ItemResponseModel<TEntity>();
+    public virtual async Task<ItemResponse<TEntity>> CreateHandler(TEntity entity) {
+        ItemResponse<TEntity> response = new ItemResponse<TEntity>();
         if (await Validate(entity)){
-            ItemResponseModel<TEntity> ent = await Create(entity);
+            ItemResponse<TEntity> ent = await Create(entity);
             if (ent != null) {
                 return ent;
             } else {
@@ -53,10 +53,10 @@ public abstract class BaseService<TEntity> where TEntity: Entity {
         return response;
     }
 
-    public virtual async Task<ItemResponseModel<TEntity>> UpdateHandler(String id, TEntity entity) {
-        ItemResponseModel<TEntity> response = new ItemResponseModel<TEntity>();
+    public virtual async Task<ItemResponse<TEntity>> UpdateHandler(String id, TEntity entity) {
+        ItemResponse<TEntity> response = new ItemResponse<TEntity>();
         if (await Validate(entity)){
-            ItemResponseModel<TEntity> ent = await Update(id, entity);
+            ItemResponse<TEntity> ent = await Update(id, entity);
             if (ent != null) {
                 if (ent.HasError == false) {
                     ent.Data.ID = id;

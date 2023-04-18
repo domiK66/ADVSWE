@@ -10,11 +10,11 @@ public class CoralService : AquariumItemService
     public CoralService(UnitOfWork uow, IRepository<AquariumItem> repository, GlobalService service)
         : base(uow, repository, service) { }
 
-    public async Task<ItemResponseModel<Coral>> AddCoral(Coral coral)
+    public async Task<ItemResponse<Coral>> AddCoral(Coral coral)
     {
         var itemResponse = await AddAquariumItem(coral);
 
-        var response = new ItemResponseModel<Coral>()
+        var response = new ItemResponse<Coral>()
         {
             Data = itemResponse.Data as Coral,
             ErrorMessages = itemResponse.ErrorMessages,
@@ -22,9 +22,9 @@ public class CoralService : AquariumItemService
         return response;
     }
 
-    public async Task<ItemResponseModel<List<Coral>>> GetCorals()
+    public async Task<ItemResponse<List<Coral>>> GetCorals()
     {
-        var response = new ItemResponseModel<List<Coral>>()
+        var response = new ItemResponse<List<Coral>>()
         {
             Data = unitOfWork.AquariumItem.GetCorals(),
         };

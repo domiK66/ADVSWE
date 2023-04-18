@@ -33,7 +33,7 @@ public class UserServiceTests : BaseUnitTest
         };
         var modelState = new Mock<ModelStateDictionary>();
         await userService.SetModelState(modelState.Object);
-        ItemResponseModel<User> fromservice = await userService.CreateHandler(user1);
+        ItemResponse<User> fromservice = await userService.CreateHandler(user1);
         Assert.IsFalse(fromservice.HasError);
 
         var user2 = new User()
@@ -45,7 +45,7 @@ public class UserServiceTests : BaseUnitTest
             Email = "kainz.domi@gmail.com",
             IsActive = true
         };
-        ItemResponseModel<User> fromservice2 = await userService.CreateHandler(user2);
+        ItemResponse<User> fromservice2 = await userService.CreateHandler(user2);
         Assert.IsTrue(fromservice2.HasError);
         await uow.User.DeleteManyAsync(user => user.Email == "kainz.domi@gmail.com");
     }
@@ -71,7 +71,7 @@ public class UserServiceTests : BaseUnitTest
 
         await userService.SetModelState(modelState.Object);
 
-        ItemResponseModel<User> fromservice2 = await userService.UpdateHandler(
+        ItemResponse<User> fromservice2 = await userService.UpdateHandler(
             userResponse.Data.ID,
             userResponse.Data
         );

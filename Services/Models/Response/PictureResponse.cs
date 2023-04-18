@@ -2,7 +2,7 @@ using DAL.Entities;
 
 namespace Services.Models.Response
 {
-    public class PictureResponseModel
+    public class PictureResponse
     {
         public byte[] Bytes { get; set; }
         public String Base64 { get {

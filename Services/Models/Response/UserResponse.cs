@@ -3,7 +3,7 @@ using Services.Auth;
 
 namespace Services.Models.Response
 {
-    public class UserResponseModel
+    public class UserResponse
     {
         public User User { get; set; }
         public AuthenticationInformation AuthInfo { get; set; }

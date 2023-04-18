@@ -12,25 +12,25 @@ public class UserService : BaseService<User>
     public UserService(UnitOfWork uow, IRepository<User> repository, GlobalService service)
         : base(uow, repository, service) { }
 
-    public override async Task<ItemResponseModel<User>> Create(User entity)
+    public override async Task<ItemResponse<User>> Create(User entity)
     {
-        ItemResponseModel<User> response = new ItemResponseModel<User>();
+        ItemResponse<User> response = new ItemResponse<User>();
         response.Data = await this.repository.InsertOneAsync(entity);
         response.HasError = false;
         return response;
     }
 
-    public override async Task<ItemResponseModel<User>> Update(string id, User entity)
+    public override async Task<ItemResponse<User>> Update(string id, User entity)
     {
-        ItemResponseModel<User> response = new ItemResponseModel<User>();
+        ItemResponse<User> response = new ItemResponse<User>();
         response.Data = await this.repository.UpdateOneAsync(entity);
         response.HasError = false;
         return response;
     }
 
-    public async Task<ItemResponseModel<UserResponseModel>> Login(LoginRequestModel request)
+    public async Task<ItemResponse<UserResponse>> Login(LoginRequest request)
     {
-        var response = new ItemResponseModel<UserResponseModel>();
+        var response = new ItemResponse<UserResponse>();
         var user = await unitOfWork.User.Login(request.Username, request.Password);
 
         if (user == null)
@@ -48,7 +48,7 @@ public class UserService : BaseService<User>
             return response;
         }
 
-        response.Data = new UserResponseModel() { AuthInfo = authInfo, User = user };
+        response.Data = new UserResponse() { AuthInfo = authInfo, User = user };
 
         return response;
     }

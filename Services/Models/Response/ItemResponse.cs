@@ -1,4 +1,4 @@
 namespace Services.Models.Response;
-public class ItemResponseModel<T>: ResponseModel where T: class {
+public class ItemResponse<T>: ResponseModel where T: class {
     public T Data { get; set; }
 }

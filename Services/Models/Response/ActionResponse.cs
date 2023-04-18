@@ -1,6 +1,6 @@
 namespace Services.Models.Response
 {
-    public class ActionResponseModel: ResponseModel
+    public class ActionResponse: ResponseModel
     {
         public Boolean Success { get; set; }
     }

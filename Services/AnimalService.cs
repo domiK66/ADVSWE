@@ -14,11 +14,11 @@ public class AnimalService : AquariumItemService
     )
         : base(unit, repository, service) { }
 
-    public async Task<ItemResponseModel<Animal>> AddAnimal(Animal animal)
+    public async Task<ItemResponse<Animal>> AddAnimal(Animal animal)
     {
         var itemResponse = await AddAquariumItem(animal);
 
-        var response = new ItemResponseModel<Animal>()
+        var response = new ItemResponse<Animal>()
         {
             Data = itemResponse.Data as Animal,
             ErrorMessages = itemResponse.ErrorMessages,
@@ -26,9 +26,9 @@ public class AnimalService : AquariumItemService
         return response;
     }
 
-    public async Task<ItemResponseModel<List<Animal>>> GetAnimals()
+    public async Task<ItemResponse<List<Animal>>> GetAnimals()
     {
-        var response = new ItemResponseModel<List<Animal>>()
+        var response = new ItemResponse<List<Animal>>()
         {
             Data = unitOfWork.AquariumItem.GetAnimals(),
         };

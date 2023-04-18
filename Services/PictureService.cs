@@ -3,6 +3,7 @@ using DAL.Entities;
 using DAL.Repository;
 using MimeKit;
 using MongoDB.Bson;
+using MongoDB.Driver.GridFS;
 using Services.Models.Request;
 using Services.Models.Response;
 
@@ -13,15 +14,12 @@ public class PictureService : BaseService<Picture>
     public PictureService(UnitOfWork uow, IRepository<Picture> repository, GlobalService service)
         : base(uow, repository, service) { }
 
-    public override Task<Models.Response.ItemResponseModel<Picture>> Create(Picture entity)
+    public override Task<Models.Response.ItemResponse<Picture>> Create(Picture entity)
     {
         throw new NotImplementedException();
     }
 
-    public override Task<Models.Response.ItemResponseModel<Picture>> Update(
-        string id,
-        Picture entity
-    )
+    public override Task<Models.Response.ItemResponse<Picture>> Update(string id, Picture entity)
     {
         throw new NotImplementedException();
     }
@@ -35,78 +33,133 @@ public class PictureService : BaseService<Picture>
         return modelStateWrapper.IsValid;
     }
 
-    public async Task<ItemResponseModel<PictureResponseModel>> AddPicture(
-        String aqauarium,
-        PictureRequestModel request
+    public async Task<ItemResponse<PictureResponse>> AddPicture(
+        string aqauariumId,
+        PictureRequest request
     )
     {
-        ItemResponseModel<PictureResponseModel> returnmodel = new ItemResponseModel<PictureResponseModel>();
+        ItemResponse<PictureResponse> returnmodel = new ItemResponse<PictureResponse>();
         returnmodel.Data = null;
         returnmodel.HasError = true;
 
-        if (request.FormFile != null) {
+        if (request.FormFile != null)
+        {
             String filename = request.FormFile.FileName;
-            if (!String.IsNullOrEmpty(filename)){
+            if (!String.IsNullOrEmpty(filename))
+            {
                 String typ = MimeTypes.GetMimeType(filename);
-                if (typ.StartsWith("image/")) {
+                if (typ.StartsWith("image/"))
+                {
                     byte[] binaries = null;
-                    using (var stream = new MemoryStream()) {
+                    using (var stream = new MemoryStream())
+                    {
                         request.FormFile.CopyTo(stream);
                         binaries = stream.ToArray();
                     }
-                    ObjectId pictureId = await unitOfWork.Context.GridFSBucket.UploadFromBytesAsync(filename, binaries);
+                    ObjectId pictureId = await unitOfWork.Context.GridFSBucket.UploadFromBytesAsync(
+                        filename,
+                        binaries
+                    );
                     Picture pic = new Picture();
                     pic.PictureID = pictureId.ToString();
                     pic.Description = request.Description;
-                    pic.Aquarium = aqauarium;
+                    pic.AquariumID = aqauariumId;
                     pic.ContentType = typ;
                     Picture indb = await unitOfWork.Picture.InsertOneAsync(pic);
 
-                    var bytes = await unitOfWork.Context.GridFSBucket.DownloadAsBytesAsync(pictureId);
-                    PictureResponseModel response = new PictureResponseModel();
+                    var bytes = await unitOfWork.Context.GridFSBucket.DownloadAsBytesAsync(
+                        pictureId
+                    );
+                    PictureResponse response = new PictureResponse();
                     response.Picture = indb;
                     response.Bytes = bytes;
                     returnmodel.Data = response;
                     returnmodel.HasError = false;
-                } else {
+                }
+                else
+                {
                     returnmodel.ErrorMessages.Add("Only images are allowed");
                 }
-            } else {
+            }
+            else
+            {
                 returnmodel.ErrorMessages.Add("filename is empty");
             }
-        } else {
+        }
+        else
+        {
             returnmodel.ErrorMessages.Add("No picture provided");
         }
 
         return returnmodel;
     }
-    // TODO
-    /* public async Task<ItemResponseModel<PictureResponseModel>> Delete(String id) {
 
-    }
-    
+    public async Task<ItemResponse<PictureResponse>> GetPicture(string id)
+    {
+        var response = new ItemResponse<PictureResponse>();
 
-    public async Task<ItemResponseModel<List<PictureResponseModel>>> GetForAquarium(String aquarium) {
-        var response = new ItemResponseModel<List<PictureResponseModel>>();
-        if (String.IsNullOrEmpty(aquarium))
+        var picture = await repository.FindByIdAsync(id);
+
+        if (picture == null)
         {
-            response.ErrorMessages.Add("No aquarium provided!");
+            response.ErrorMessages.Add("Picture is null");
             return response;
         }
-        var aquariumPictures = unitOfWork.Picture.FilterBy(a => a.Aquarium == aquarium);
+        ;
 
-        response.Data = aquariumPictures.ToList();
-        return response;
-    }
+        var pictureBytes = await unitOfWork.Context.GridFSBucket.DownloadAsBytesAsync(
+            picture.PictureID
+        );
 
-
-    public async Task<ItemResponseModel<PictureResponseModel>> GetPicture(String id) {
-        var picture = unitOfWork.Picture.FindByIdAsync(id);
-        var response = new ItemResponseModel<PictureResponseModel>() {
-            Data = picture };
+        response.Data = new PictureResponse() { Picture = picture, Bytes = pictureBytes, };
 
         return response;
     }
-    */
-    
+
+    public async Task<ItemResponse<List<PictureResponse>>> GetForAquarium(string aquariumId)
+    {
+        var response = new ItemResponse<List<PictureResponse>>();
+
+        var pictures = repository.FilterBy(picture => picture.AquariumID == aquariumId).ToList();
+
+        pictures.ForEach(async picture =>
+        {
+            var pictureResponse = await GetPicture(picture.ID);
+
+            if (pictureResponse.ErrorMessages.Count > 0)
+            {
+                response.ErrorMessages.AddRange(pictureResponse.ErrorMessages);
+            }
+
+            response.Data.Add(pictureResponse.Data);
+        });
+
+        return response;
+    }
+
+    public override async Task<ActionResponse> Delete(string pictureId)
+    {
+        var picture = await repository.FindByIdAsync(pictureId);
+        try
+        {
+            await unitOfWork.Context.GridFSBucket.DeleteAsync(picture.PictureID);
+        }
+        catch (Exception ex)
+        {
+            if (ex is GridFSFileNotFoundException)
+            {
+                log.Warning($"PictureID {picture.PictureID} not found in GridFS");
+            }
+            else
+            {
+                return new ActionResponse()
+                {
+                    Success = false,
+                    ErrorMessages = new List<string>() { ex.Message },
+                };
+            }
+        }
+
+        return await base.Delete(pictureId);
+    }
 }

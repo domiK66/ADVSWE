@@ -15,7 +15,7 @@ namespace Tests.ServiceTests
             UnitOfWork uow = new UnitOfWork();
             PictureService service = new PictureService(uow, uow.Picture, null);
 
-            PictureRequestModel request = new PictureRequestModel();
+            PictureRequest request = new PictureRequest();
             request.Description = "sasdasd";
 
             byte[] bytes = System.IO.File.ReadAllBytes(
@@ -45,7 +45,7 @@ namespace Tests.ServiceTests
             UnitOfWork uow = new UnitOfWork();
             PictureService service = new PictureService(uow, uow.Picture, null);
 
-            PictureRequestModel request = new PictureRequestModel();
+            PictureRequest request = new PictureRequest();
             request.Description = "sasdasd";
 
             byte[] bytes = System.IO.File.ReadAllBytes(
@@ -63,7 +63,7 @@ namespace Tests.ServiceTests
             request.FormFile = file;
             List<Picture> pictures = uow.Picture.FilterBy(x => true).ToList();
             int old = pictures.Count;
-            ItemResponseModel<PictureResponseModel> pics = await service.AddPicture(
+            ItemResponse<PictureResponse> pics = await service.AddPicture(
                 "SchiScho",
                 request
             );

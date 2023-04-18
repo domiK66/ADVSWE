@@ -13,26 +13,26 @@ public class AquariumItemService : BaseService<AquariumItem>
     )
         : base(uow, repository, service) { }
 
-    public Task<ItemResponseModel<AquariumItem>> AddAquariumItem(AquariumItem item)
+    public Task<ItemResponse<AquariumItem>> AddAquariumItem(AquariumItem item)
     {
         return CreateHandler(item);
     }
 
-    public async override Task<ItemResponseModel<AquariumItem>> Create(AquariumItem entity)
+    public async override Task<ItemResponse<AquariumItem>> Create(AquariumItem entity)
     {
-        var response = new ItemResponseModel<AquariumItem>()
+        var response = new ItemResponse<AquariumItem>()
         {
             Data = await repository.InsertOneAsync(entity),
         };
         return response;
     }
 
-    public async override Task<ItemResponseModel<AquariumItem>> Update(
+    public async override Task<ItemResponse<AquariumItem>> Update(
         string id,
         AquariumItem entity
     )
     {
-        var response = new ItemResponseModel<AquariumItem>()
+        var response = new ItemResponse<AquariumItem>()
         {
             Data = await repository.UpdateOneAsync(entity),
         };

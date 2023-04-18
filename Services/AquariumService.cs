@@ -10,19 +10,27 @@ public class AquariumService : BaseService<Aquarium>
     public AquariumService(UnitOfWork uow, IRepository<Aquarium> repository, GlobalService service)
         : base(uow, repository, service) { }
 
-    public override Task<ItemResponseModel<Aquarium>> Create(Aquarium entity)
+    public async override Task<ItemResponse<Aquarium>> Create(Aquarium entity)
     {
-        throw new NotImplementedException();
+        var response = new ItemResponse<Aquarium>()
+        {
+            Data = await repository.InsertOneAsync(entity),
+        };
+        return response;
     }
 
-    public override Task<ItemResponseModel<Aquarium>> Update(string id, Aquarium entity)
+    public async override Task<ItemResponse<Aquarium>> Update(string id, Aquarium entity)
     {
-        throw new NotImplementedException();
+        var response = new ItemResponse<Aquarium>()
+        {
+            Data = await repository.UpdateOneAsync(entity),
+        };
+        return response;
     }
 
-    public async Task<ItemResponseModel<List<Aquarium>>> GetForUser(string userId)
+    public async Task<ItemResponse<List<Aquarium>>> GetForUser(string userId)
     {
-        var response = new ItemResponseModel<List<Aquarium>>();
+        var response = new ItemResponse<List<Aquarium>>();
 
         if (String.IsNullOrEmpty(userId))
         {
