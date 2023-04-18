@@ -11,8 +11,6 @@ namespace API.Controllers
     {
         AnimalService AnimalService { get; set; }
 
-        
-
         public AnimalController(GlobalService service, IHttpContextAccessor accessor)
             : base(service.AnimalService, accessor)
         {
