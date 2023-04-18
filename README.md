@@ -1,7 +1,7 @@
 # Aquarium Management Application
 Advanced Software Engineering 1
 
-![alt text](.\image.jpg)
+![alt text](./image.jpg)
 
 
 
