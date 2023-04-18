@@ -1,6 +1,9 @@
-# Advanced Software Engineering 1
+# Aquarium Management Application
+Advanced Software Engineering 1
 
-Aquarium Management Application
+![alt text](.\image.jpg)
+
+
 
 ## Dotnet Usage
 
