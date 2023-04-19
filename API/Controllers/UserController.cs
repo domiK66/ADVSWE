@@ -20,6 +20,8 @@ namespace API.Controllers
 
         [HttpPost]
         [Route("login")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ItemResponse<UserResponse>>> Login(
             [FromBody] LoginRequest request
         )
