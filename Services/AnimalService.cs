@@ -22,6 +22,7 @@ public class AnimalService : AquariumItemService
         {
             Data = itemResponse.Data as Animal,
             ErrorMessages = itemResponse.ErrorMessages,
+            HasError = itemResponse.HasError
         };
         return response;
     }

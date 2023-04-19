@@ -1,4 +1,5 @@
 using DAL.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 using Services.Models.Response;
@@ -7,6 +8,7 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class AnimalController : BaseController<AquariumItem>
     {
         AnimalService AnimalService { get; set; }
@@ -20,10 +22,14 @@ namespace API.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<ItemResponse<Animal>>> Create([FromBody] Animal request)
         {
-            return await AnimalService.AddAnimal(request);
+            var result = await AnimalService.AddAnimal(request);
+            if (result.HasError)
+                return BadRequest(result);
+            else
+                return result;
         }
 
         [HttpGet]
@@ -43,7 +49,11 @@ namespace API.Controllers
             [FromBody] AquariumItem request
         )
         {
-            return await AnimalService.Update(request.ID, request);
+            var result = await AnimalService.Update(request.ID, request);
+            if (result.HasError)
+                return BadRequest(result);
+            else
+                return result;
         }
     }
 }
