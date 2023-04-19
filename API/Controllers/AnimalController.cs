@@ -35,7 +35,6 @@ namespace API.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ItemResponse<List<Animal>>>> Get()
         {
             return await AnimalService.GetAnimals();
@@ -45,6 +44,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<ItemResponse<AquariumItem>>> Edit(
             [FromBody] AquariumItem request
         )
