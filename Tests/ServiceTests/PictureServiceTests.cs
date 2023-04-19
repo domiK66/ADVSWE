@@ -19,7 +19,7 @@ namespace Tests.ServiceTests
             request.Description = "sasdasd";
 
             byte[] bytes = System.IO.File.ReadAllBytes(
-                "/Users/dominikkainz/Documents/ADVSWE/image.jpg"
+                "C:/Users/AK-47u/Desktop/Code Projects/fhj-aim22/ADVSWE/image.jpg"
             );
 
             IFormFile file = new FormFile(

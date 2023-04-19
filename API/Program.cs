@@ -1,15 +1,17 @@
+using System.Text.Json.Serialization;
 using DAL;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Newtonsoft.Json.Converters;
 using Services;
 using Services.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<GlobalService>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+builder.Services.AddHealthChecks();
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -18,7 +20,32 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer( x => x.TokenValidationParameters = Authentication.ValidationParams);
+builder.Services
+    .AddControllersWithViews()
+    .AddNewtonsoftJson()
+    .AddJsonOptions(o =>
+    {
+        o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
+
+builder.Services
+    .AddControllers()
+    .AddNewtonsoftJson(o =>
+    {
+        o.SerializerSettings.Converters.Add(new StringEnumConverter());
+    });
+
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(x => x.TokenValidationParameters = Authentication.ValidationParams);
+
+builder.Services.AddCors(
+    options =>
+        options.AddPolicy(
+            "Cors",
+            builder => builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader()
+        )
+);
 
 builder.Services.AddOpenApiDocument(doc =>
 {
@@ -38,6 +65,10 @@ builder.Services.AddOpenApiDocument(doc =>
 });
 
 var app = builder.Build();
+
+app.UseCors("Cors");
+
+app.MapHealthChecks("/health");
 
 /*
 // Configure the HTTP request pipeline.
